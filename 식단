@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<title>W3.CSS Template</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    html,body,h1,h2,h3,h4,h5,h6 {
+        font-family: "Roboto", sans-serif;
+    }
+    
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+    }
+    main {
+        text-align: center;
+        margin-top: 100px;
+
+    }
+    .meal-form {
+        border: 1px solid #333333;
+        padding: 20px;
+        margin: 10px;
+        background-color: #ffffff;
+        display: inline-block;
+        text-align: left;
+    }
+    label {
+        display: block;
+        margin-bottom: 5px;
+        color: #333333;
+    }
+    input[type="text"],
+    input[type="number"] {
+        width: 100%;
+        padding: 5px;
+        border: 1px solid #cccccc;
+    }
+    button {
+        margin-top: 10px;
+        padding: 8px 15px;
+        background-color: #333333;
+        color: #ffffff;
+        border: none;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #555555;
+    }
+    footer {
+        background-color: #333;
+        color: #fff;
+        padding: 10px;
+        text-align: center;
+    }
+</style>
+</head>
+<body>
+<!-- Navbar -->
+<div class="w3-top">
+    <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
+        <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+        <a href="#" class="w3-bar-item w3-button w3-theme-l1">Logo</a>
+        <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">About</a>
+        <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Values</a>
+        <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">News</a>
+        <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Contact</a>
+        <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Clients</a>
+        <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-white">Partners</a>
+    </div>
+</div>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+<main>
+    <h2>아침/점심/저녁 식단</h2>
+    <div id="meal-container"></div>
+    <div>
+        <button onclick="addMealForm('아침')">아침 추가</button>
+        <button onclick="addMealForm('점심')">점심 추가</button>
+        <button onclick="addMealForm('저녁')">저녁 추가</button>
+        <button onclick="submitMealData()">식단 등록</button>
+    </div>
+</main>
+
+<footer id="myFooter">
+    <div class="w3-container w3-theme-l2 w3-padding-32">
+        <h4>Footer</h4>
+    </div>
+    <div class="w3-container w3-theme-l1">
+        <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+    </div>
+</footer>
+
+<script>
+    // Get the Sidebar
+    var mySidebar = document.getElementById("mySidebar");
+    // Get the DIV with overlay effect
+    var overlayBg = document.getElementById("myOverlay");
+    // Toggle between showing and hiding the sidebar, and add overlay effect
+    function w3_open() {
+        if (mySidebar.style.display === 'block') {
+            mySidebar.style.display = 'none';
+            overlayBg.style.display = "none";
+        } else {
+            mySidebar.style.display = 'block';
+            overlayBg.style.display = "block";
+        }
+    }
+    // Close the sidebar with the close button
+    function w3_close() {
+        mySidebar.style.display = "none";
+        overlayBg.style.display = "none";
+    }
+    let counter = 0;
+    let mealData = [];
+    function addMealForm(mealType) {
+        counter++;
+        const newForm = document.createElement("div");
+        newForm.className = "meal-form";
+        newForm.innerHTML = `
+            <h3>${mealType} 식단 ${counter}</h3>
+            <label for="meal-${mealType}-${counter}">식단 내용:</label>
+            <input type="text" id="meal-${mealType}-${counter}" name="meal-${mealType}-${counter}">
+            <br>
+            <label for="calories-${mealType}-${counter}">칼로리:</label>
+            <input type="number" id="calories-${mealType}-${counter}" name="calories-${mealType}-${counter}">
+            <br>
+            <button onclick="removeMealForm(this.parentNode)">식단 삭제</button>
+            <button onclick="submitMealForm(this.parentNode)">식단 저장</button>
+        `;
+        document.getElementById("meal-container").appendChild(newForm);
+    }
+    function removeMealForm(form) {
+        form.parentNode.removeChild(form);
+    }
+    function submitMealForm(form) {
+        const mealType = form.getElementsByTagName("h3")[0].textContent.split(" ")[0];
+        const mealContentInput = form.getElementsByTagName("input")[0];
+        const caloriesInput = form.getElementsByTagName("input")[1];
+        const mealContent = mealContentInput.value;
+        const calories = caloriesInput.value;
+        mealData.push({
+            mealType: mealType,
+            mealContent: mealContent,
+            calories: calories
+        });
+        console.log(mealData);
+        // You can perform any additional actions with the meal data here
+    }
+    function submitMealData() {
+        console.log(mealData);
+        // Send the mealData to the server or perform any other desired action
+    }
+</script>
+
+</body>
+</html>
